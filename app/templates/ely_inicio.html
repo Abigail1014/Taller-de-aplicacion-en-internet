@@ -1,0 +1,245 @@
+{% extends "appbuilder/base.html" %}
+
+{% block content %}
+{# Textos de la promoción #}
+{% set promo_titulo = "Packs de ofertas" %}
+{% set promo_descuento = "-20% dto." %}
+{% set promo_extra = "Extra" %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:ital,wght@0,400;0,600;0,800;1,800&display=swap" rel="stylesheet">
+
+<style>
+  .ely {
+    --red: #D6123E; --pink: #FF4F78; --yellow: #FFE01B;
+    --ink: #1B1B1F; --muted: #6B6B76; --bg: #F3F3F5; --line: #E2E2E8;
+    font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+    color: var(--ink); background: var(--bg);
+    margin: -10px -15px 0; padding-bottom: 40px;
+  }
+  .ely * { box-sizing: border-box; }
+  .ely a { text-decoration: none; }
+  .ely [hidden] { display: none !important; }
+
+  /* Cabecera */
+  .ely-top { background: #fff; padding: 14px 28px; display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+  .ely-marca { font-weight: 800; font-style: italic; font-size: 34px; color: var(--red); line-height: 1; letter-spacing: -.5px; }
+  .ely-marca small { display: block; font-style: normal; font-weight: 600; font-size: 11px; color: var(--muted); letter-spacing: 0; margin-top: 2px; }
+  .ely-buscar { flex: 1 1 280px; display: flex; border: 2px solid var(--ink); border-radius: 999px; overflow: hidden; background: #fff; }
+  .ely-buscar input { flex: 1; border: 0; padding: 10px 18px; font: inherit; font-size: 15px; outline: none; min-width: 0; }
+  .ely-buscar button { border: 0; background: var(--ink); color: #fff; padding: 0 22px; font-size: 16px; cursor: pointer; }
+  .ely-buscar:focus-within { border-color: var(--red); }
+  .ely-usuario { font-size: 14px; color: var(--ink); }
+  .ely-usuario a { color: var(--ink); font-weight: 600; }
+
+  /* Categorías */
+  .ely-cats { background: #fff; padding: 0 28px 14px; display: flex; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+  .ely-pill { border: 0; background: var(--bg); color: var(--ink); font: inherit; font-size: 14px; font-weight: 600; padding: 9px 18px; border-radius: 999px; cursor: pointer; }
+  .ely-pill:hover { background: #E9E9EE; }
+  .ely-pill[aria-pressed="true"] { background: var(--red); color: #fff; }
+  .ely-pill:focus-visible, .ely-btn:focus-visible, .ely-x:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+  /* Banner de promoción */
+  .ely-banner { background: var(--red); color: #fff; padding: 34px 28px; display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap; overflow: hidden; }
+  .ely-script { font-family: "Pacifico", cursive; font-size: clamp(38px, 6vw, 64px); line-height: 1; transform: rotate(-4deg); display: inline-block; }
+  .ely-gigante { font-weight: 800; font-style: italic; font-size: clamp(64px, 12vw, 130px); line-height: .9; color: var(--yellow); margin: 4px 0 12px; letter-spacing: -2px; }
+  .ely-banner p { font-size: 18px; margin: 0 0 18px; }
+  .ely-btn { display: inline-block; background: var(--yellow); color: var(--ink); font-weight: 800; font-size: 17px; padding: 12px 40px; border-radius: 999px; border: 0; cursor: pointer; }
+  .ely-btn:hover { background: #fff04d; color: var(--ink); }
+  .ely-cupones { display: flex; gap: 14px; flex-wrap: wrap; }
+  .ely-cupon { background: #FFE9EE; color: var(--red); border-radius: 12px; padding: 16px 22px; text-align: center; min-width: 170px; border: 2px dashed var(--pink); }
+  .ely-cupon b { display: block; font-size: 30px; font-weight: 800; line-height: 1.1; }
+  .ely-cupon span { display: block; color: var(--muted); font-size: 13px; margin: 2px 0 8px; }
+  .ely-cupon em { font-style: normal; font-weight: 600; font-size: 12px; color: var(--ink); }
+
+  /* Personal */
+  .ely-staff { background: #fff; border-bottom: 1px solid var(--line); padding: 14px 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 22px; }
+  .ely-dato b { font-weight: 800; font-size: 22px; line-height: 1; color: var(--ink); margin-right: 6px; }
+  .ely-dato span { font-size: 13px; color: var(--muted); }
+  .ely-dato.alerta b { color: var(--red); }
+  .ely-enlaces { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+  .ely-enlaces a { background: var(--ink); color: #fff; font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 999px; }
+  .ely-enlaces a:hover { background: var(--red); color: #fff; }
+
+  /* Productos */
+  .ely-sec { padding: 28px 28px 0; }
+  .ely-sec h2 { font-weight: 800; font-size: 26px; margin: 0 0 16px; }
+  .ely-sec h2 span { color: var(--red); }
+  .ely-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; }
+  .ely-prod { background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
+  .ely-img { height: 130px; display: flex; align-items: center; justify-content: center; font-size: 56px; position: relative; }
+  .ely-badge { position: absolute; top: 8px; left: 8px; background: var(--red); color: #fff; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
+  .ely-badge.agotado { background: var(--muted); }
+  .ely-info { padding: 12px 14px 16px; }
+  .ely-nombre { font-size: 14px; line-height: 1.35; height: 2.7em; overflow: hidden; margin: 0 0 8px; }
+  .ely-precio { font-weight: 800; font-size: 22px; color: var(--red); line-height: 1; }
+  .ely-precio small { font-size: 13px; font-weight: 600; margin-right: 3px; }
+  .ely-cat { display: block; margin-top: 8px; font-size: 12px; color: var(--muted); }
+  .ely-vacio { background: #fff; border-radius: 12px; padding: 28px; text-align: center; color: var(--muted); }
+
+  /* Ventana de promoción */
+  .ely-pop { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .ely-pop-caja { position: relative; width: min(420px, 100%); background: linear-gradient(170deg, var(--pink), #FF7A93); color: #fff; border-radius: 22px; padding: 30px 26px 28px; text-align: center; }
+  .ely-pop .ely-script { font-size: 50px; }
+  .ely-pop h3 { font-weight: 800; font-size: 22px; margin: 18px 0 4px; color: #fff; }
+  .ely-pop .ely-desc { font-weight: 800; font-style: italic; font-size: 54px; line-height: 1; color: var(--yellow); margin: 6px 0 22px; }
+  .ely-pop .ely-btn { width: 100%; }
+  .ely-x { position: absolute; top: -16px; right: -16px; width: 38px; height: 38px; border-radius: 50%; border: 0; background: #fff; color: var(--ink); font-size: 20px; line-height: 1; cursor: pointer; }
+
+  @media (max-width: 700px) {
+    .ely-top, .ely-cats, .ely-banner, .ely-staff, .ely-sec { padding-left: 16px; padding-right: 16px; }
+    .ely-enlaces { margin-left: 0; }
+  }
+</style>
+
+<div class="ely">
+  <header class="ely-top">
+    <a class="ely-marca" href="/">ELY<small>Tienda y almacén</small></a>
+    <div class="ely-buscar" role="search">
+      <input id="ely-q" type="search" placeholder="Buscar productos" aria-label="Buscar productos">
+      <button type="button" aria-label="Buscar"><i class="fa fa-search"></i></button>
+    </div>
+    <div class="ely-usuario">
+      {% if current_user.is_authenticated %}
+        Hola, <a href="/ventamodelview/list/">{{ current_user.first_name }}</a>
+      {% else %}
+        <a href="{{ appbuilder.get_url_for_login }}">Iniciar sesión</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <nav class="ely-cats" aria-label="Categorías">
+    <button type="button" class="ely-pill" data-cat="" aria-pressed="true">Todas las categorías</button>
+    {% for c in categorias %}
+      <button type="button" class="ely-pill" data-cat="{{ c.nombre }}" aria-pressed="false">{{ c.emoji }} {{ c.nombre }}</button>
+    {% endfor %}
+  </nav>
+
+  <section class="ely-banner">
+    <div>
+      <span class="ely-script">Promo</span>
+      <div class="ely-gigante">ELY</div>
+      <p>{{ promo_titulo }}: {{ promo_descuento }} {{ promo_extra }}</p>
+      <a class="ely-btn" href="#ely-productos">Comprar</a>
+    </div>
+    <div class="ely-cupones">
+      <div class="ely-cupon"><b>-Bs 10</b><span>en compras desde Bs 100</span><em>Código: ELY10</em></div>
+      <div class="ely-cupon"><b>-Bs 25</b><span>en compras desde Bs 250</span><em>Código: ELY25</em></div>
+    </div>
+  </section>
+
+  {% if stats %}
+  <section class="ely-staff" aria-label="Resumen del almacén">
+    <div class="ely-dato"><b>{{ stats.productos }}</b><span>productos</span></div>
+    <div class="ely-dato {% if stats.bajo %}alerta{% endif %}"><b>{{ stats.bajo }}</b><span>con stock bajo</span></div>
+    <div class="ely-dato"><b>{{ stats.clientes }}</b><span>clientes</span></div>
+    <div class="ely-dato"><b>{{ stats.ventas }}</b><span>ventas válidas</span></div>
+    <div class="ely-dato"><b>{{ stats.total }}</b><span>Bs en ingresos</span></div>
+    <div class="ely-enlaces">
+      {% if appbuilder.sm.has_access('can_list', 'ProductoModelView') %}<a href="/productomodelview/list/">Productos</a>{% endif %}
+      {% if appbuilder.sm.has_access('can_list', 'VentaModelView') %}<a href="/ventamodelview/list/">Ventas</a>{% endif %}
+      {% if appbuilder.sm.has_access('can_list', 'ClienteModelView') %}<a href="/clientemodelview/list/">Clientes</a>{% endif %}
+      {% if appbuilder.sm.has_access('can_inventario', 'ReportesView') %}<a href="/reportes/inventario/">Stock bajo</a>{% endif %}
+      {% if appbuilder.sm.has_access('can_ventas', 'ReportesView') %}<a href="/reportes/ventas/">Reportes</a>{% endif %}
+      {% if appbuilder.sm.has_access('can_inicio', 'AsistenteIAView') %}<a href="/asistente/">Asistente IA</a>{% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="ely-sec" id="ely-productos">
+    <h2>Súper<span>Ofertas</span></h2>
+    <div class="ely-grid">
+      {% for p in productos %}
+      <article class="ely-prod" data-cat="{{ p.categoria }}" data-nombre="{{ p.nombre|lower }}">
+        <div class="ely-img" style="background: {{ p.color }}">
+          {{ p.emoji }}
+          {% if p.estado == 'ultimas' %}<span class="ely-badge">Últimas unidades</span>{% endif %}
+          {% if p.estado == 'agotado' %}<span class="ely-badge agotado">Agotado</span>{% endif %}
+        </div>
+        <div class="ely-info">
+          <h3 class="ely-nombre" style="font-weight:600">{{ p.nombre }}</h3>
+          <div class="ely-precio"><small>Bs</small>{{ p.precio }}</div>
+          <span class="ely-cat">{{ p.categoria }}</span>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    <div class="ely-vacio" id="ely-vacio" hidden>No hay productos con esa búsqueda. Prueba con otra palabra o categoría.</div>
+    {% if not productos %}
+      <div class="ely-vacio">Aún no hay productos. Agrégalos en Inventario → Productos.</div>
+    {% endif %}
+  </section>
+
+  <div class="ely-pop" id="ely-pop" role="dialog" aria-modal="true" aria-label="Promoción" hidden>
+    <div class="ely-pop-caja">
+      <button type="button" class="ely-x" id="ely-x" aria-label="Cerrar promoción">&times;</button>
+      <span class="ely-script">Promo ELY</span>
+      <h3>{{ promo_titulo }}</h3>
+      <div class="ely-desc">{{ promo_descuento }}<br>{{ promo_extra }}</div>
+      <a class="ely-btn" id="ely-comprar" href="#ely-productos">Comprar</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var q = document.getElementById('ely-q');
+  var cards = document.querySelectorAll('.ely-prod');
+  var pills = document.querySelectorAll('.ely-pill');
+  var vacio = document.getElementById('ely-vacio');
+  var cat = '';
+
+  function filtrar() {
+    var t = q.value.trim().toLowerCase(), n = 0;
+    cards.forEach(function (c) {
+      var ok = (!cat || c.dataset.cat === cat) && (!t || c.dataset.nombre.indexOf(t) > -1);
+      c.hidden = !ok;
+      if (ok) n++;
+    });
+    vacio.hidden = n > 0 || cards.length === 0;
+  }
+  
+  if (q) {
+    q.addEventListener('input', filtrar);
+  }
+  
+  pills.forEach(function (p) {
+    p.addEventListener('click', function () {
+      cat = p.dataset.cat;
+      pills.forEach(function (o) { o.setAttribute('aria-pressed', o === p ? 'true' : 'false'); });
+      filtrar();
+    });
+  });
+
+  var pop = document.getElementById('ely-pop');
+  function cerrar() {
+    if (pop) pop.hidden = true;
+    try { sessionStorage.setItem('ely_pop', '1'); } catch (e) {}
+  }
+  
+  var visto = false;
+  try { visto = !!sessionStorage.getItem('ely_pop'); } catch (e) {}
+  
+  if (pop) {
+    if (!visto) { 
+      pop.hidden = false; 
+      var cerrarBtn = document.getElementById('ely-x');
+      if (cerrarBtn) cerrarBtn.focus(); 
+    }
+    
+    var xBtn = document.getElementById('ely-x');
+    if (xBtn) xBtn.addEventListener('click', cerrar);
+    
+    var comprarBtn = document.getElementById('ely-comprar');
+    if (comprarBtn) comprarBtn.addEventListener('click', cerrar);
+    
+    pop.addEventListener('click', function (e) { if (e.target === pop) cerrar(); });
+  }
+  
+  document.addEventListener('keydown', function (e) { 
+    if (e.key === 'Escape' && pop && !pop.hidden) cerrar(); 
+  });
+})();
+</script>
+{% endblock %}
