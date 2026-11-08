@@ -1,0 +1,55 @@
+{% extends "appbuilder/base.html" %}
+
+{% block content %}
+<div class="container">
+  <h2>{{ titulo }}</h2>
+
+  <form method="get" class="well">
+    <div class="row">
+      {% for f in filtros %}
+      <div class="col-sm-3" style="margin-bottom:10px">
+        {% if f.tipo == 'checkbox' %}
+          <label>
+            <input type="checkbox" name="{{ f.name }}" value="1" {% if f.valor %}checked{% endif %}>
+            {{ f.label }}
+          </label>
+        {% else %}
+          <label for="{{ f.name }}">{{ f.label }}</label>
+          {% if f.tipo == 'select' %}
+          <select name="{{ f.name }}" id="{{ f.name }}" class="form-control">
+            <option value="">Todos</option>
+            {% for valor, texto in f.opciones %}
+            <option value="{{ valor }}" {% if f.valor|string == valor|string %}selected{% endif %}>{{ texto }}</option>
+            {% endfor %}
+          </select>
+          {% else %}
+          <input type="{{ f.tipo }}" name="{{ f.name }}" id="{{ f.name }}" class="form-control" value="{{ f.valor }}">
+          {% endif %}
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+    <a href="{{ request.path }}" class="btn btn-default">Limpiar</a>
+  </form>
+
+  <p>
+    {% for etiqueta, valor in resumen %}
+      <span class="label label-info" style="font-size:100%; margin-right:6px">{{ etiqueta }}: {{ valor }}</span>
+    {% endfor %}
+  </p>
+
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>{% for c in columnas %}<th>{{ c }}</th>{% endfor %}</tr>
+    </thead>
+    <tbody>
+      {% for fila in filas %}
+      <tr>{% for celda in fila %}<td>{{ celda }}</td>{% endfor %}</tr>
+      {% else %}
+      <tr><td colspan="{{ columnas|length }}" class="text-center">Sin resultados para los filtros elegidos.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
