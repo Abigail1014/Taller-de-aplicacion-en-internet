@@ -1,0 +1,52 @@
+{% extends "appbuilder/base.html" %}
+
+{% block content %}
+<div class="container">
+  <h2>Asistente de IA (Google Gemini)</h2>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">Sugerir reposición de stock</div>
+        <div class="panel-body">
+          <p>Analiza los productos con stock bajo y las ventas de los últimos 30 días.</p>
+          <form method="post" action="{{ url_for('AsistenteIAView.reposicion') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-primary">Analizar inventario</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">Generar descripción de producto</div>
+        <div class="panel-body">
+          <form method="post" action="{{ url_for('AsistenteIAView.descripcion') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+              <select name="producto_id" class="form-control" required>
+                <option value="">Seleccione un producto…</option>
+                {% for p in productos %}
+                <option value="{{ p.id }}">{{ p.codigo }} - {{ p.nombre }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="checkbox">
+              <label><input type="checkbox" name="guardar" value="1"> Guardar en el producto</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Generar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if respuesta %}
+  <div class="panel panel-success">
+    <div class="panel-heading">{{ titulo_respuesta }}</div>
+    <div class="panel-body" style="white-space: pre-wrap">{{ respuesta }}</div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
