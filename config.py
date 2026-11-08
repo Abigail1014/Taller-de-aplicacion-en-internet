@@ -34,7 +34,7 @@ AUTH_ROLE_PUBLIC = "Public"  # sin permisos: obliga a iniciar sesión
 WTF_CSRF_ENABLED = True
 
 # --- Apariencia -----------------------------------------------------------
-APP_NAME = "Tienda - Inventario y Ventas"
+APP_NAME = "ELY - Tienda y Almacén "
 BABEL_DEFAULT_LOCALE = "es"
 LANGUAGES = {"es": {"flag": "es", "name": "Español"}, "en": {"flag": "gb", "name": "English"}}
 
